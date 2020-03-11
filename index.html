@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KILLER GAME v.0.0.1</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div id="monsterGame">
+    <div class="intro-screen" v-if="!levelSelected">
+      <h1> KILLER GAME v.0.0.1</h1>
+      <input v-model="you.name" placeholder="Type your name..." required>
+      <input v-model="enemy.name" placeholder="Type enemy name..." required>
+      
+      <h4>Please select difficulty: </h4>
+      <button class="btn green" @click="setDifficulty('easy')">Easy</button>
+      <button class="btn orange" @click="setDifficulty('medium')">Medium</button>
+      <button class="btn red" @click="setDifficulty('hard')">Hard</button>
+    </div>
+    <div v-else>
+      <div class="score-board">
+        <h3>
+          SCORE BOARD <br>
+          <span>{{ `${you.wins} - ${enemy.wins}` }}</span>
+        </h3>
+      </div>
+      <div class="oponents">
+        <div class="player">
+          <h1 class="title">{{ you.name }}</h1>
+          <div class="hp-wrapper">
+            <div class="hp-count" :style="hpLeftYou">{{ you.hp > 0 ? you.hp : '' }}</div>
+          </div>
+        </div>
+        <div class="player">
+          <h1 class="title">{{ enemy.name }}</h1>
+          <div class="hp-wrapper">
+            <div class="hp-count" :style="hpLeftEnemy">{{ enemy.hp > 0 ? enemy.hp : '' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="controls" :class="{'controls-inline': !gameStarted}">
+        <template v-if="!gameStarted">
+          <button class="btn" @click="startGame">
+            Start New Game
+          </button>
+          <br>
+          <button class="btn btn-small" @click="resetDifficulty">
+            Change Difficulty
+          </button>
+        </template>
+        <template v-else>
+          <button class="btn red" @click="attack()">Attack</button>
+          <button class="btn orange" :class="{gray: disabledSpecialAttack}" @click="specialAttack()">
+            Special Attack
+          </button>
+          <button class="btn green" @click="heal()">Heal</button>
+          <button class="btn" @click="giveUp()">Give Up</button>
+        </template>
+      </div>
+      <div class="combat-history" v-if="gameStarted">
+        <ul>
+          <li v-for="action in actions" :class="action.type">{{ action.label }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
